@@ -6,6 +6,7 @@ Users can approve or deny actions from the system tray or web UI.
 import threading
 import time
 import asyncio
+import ctypes
 from typing import Optional, Callable
 from .config import Settings
 from .logger import audit_log
@@ -124,18 +125,24 @@ class NotificationManager:
             except Exception:
                 pass
 
-        # Show Windows toast notification (in thread to not block)
-        if self._toaster:
+        # Show interactive modal popup box on Windows desktop
+        def _show_msgbox():
             try:
-                threading.Thread(target=lambda: self._toaster.show_toast(
-                    "Windows Arena AI — Approval Required",
-                    f"{message}\n\nApprove via system tray or web UI.",
-                    duration=min(self.settings.approval_timeout_sec, 30),
-                    threaded=False,
-                    icon_path=None,
-                ), daemon=True).start()
+                # MB_YESNO | MB_ICONQUESTION | MB_TOPMOST | MB_SETFOREGROUND
+                res = ctypes.windll.user32.MessageBoxW(
+                    0,
+                    f"Agent requested permission:\n\n{message}\n\nDo you want to allow this action?",
+                    f"agent2win Approval [{req_id}]",
+                    0x00000004 | 0x00000020 | 0x00040000 | 0x00010000
+                )
+                if res == 6:  # IDYES
+                    req.approve()
+                elif res == 7:  # IDNO
+                    req.deny()
             except Exception as e:
-                self.logger.warning(f"Toast notification failed: {e}")
+                self.logger.warning(f"Popup dialog failed: {e}")
+
+        threading.Thread(target=_show_msgbox, daemon=True).start()
 
         # If GUI callback is set, use it
         if self._approval_gui_callback:

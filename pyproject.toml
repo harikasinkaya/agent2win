@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent2win"
-version = "1.0.9"
+version = "1.0.10"
 description = "Universal Bridge Between Web/Cloud AI Agents (Arena.ai, ChatGPT, Claude, Grok) & Windows OS"
 readme = "README.md"
 authors = [
