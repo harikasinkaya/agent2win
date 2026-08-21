@@ -75,6 +75,7 @@ Keys: enter, tab, escape, backspace, delete, space, up, down, left, right, home,
 ```
 POST /api/command {"cmd":"dir C:\\"}
 POST /api/command {"cmd":"ipconfig","timeout":10}
+POST /api/command {"cmd":"npm start","background":true}  → Run persistent servers/processes in background without blocking
 ```
 
 ## 📁 Files

@@ -6,6 +6,7 @@ import subprocess
 import shlex
 import time
 import threading
+import asyncio
 from typing import Optional
 from .config import Settings
 from .logger import audit_log
@@ -38,10 +39,10 @@ class CommandEngine:
                 return False
         return True
 
-    async def execute(self, cmd: str, cwd: Optional[str] = None, timeout: Optional[int] = None) -> dict:
+    async def execute(self, cmd: str, cwd: Optional[str] = None, timeout: Optional[int] = None, background: bool = False) -> dict:
         """
         Execute a Windows command. Returns dict with:
-          success, stdout, stderr, returncode, duration_sec, approved
+          success, stdout, stderr, returncode, duration_sec, approved, (pid if background)
         """
         if self._is_blocked(cmd):
             audit_log(self.settings, "command_blocked", {"cmd": cmd}, approved=False)
@@ -57,23 +58,50 @@ class CommandEngine:
                 audit_log(self.settings, "command_denied", {"cmd": cmd}, approved=False)
                 return {"success": False, "error": "Command denied by user", "stdout": "", "stderr": "", "returncode": -1}
 
-        audit_log(self.settings, "command_executed", {"cmd": cmd, "cwd": cwd}, approved=True)
-        self.logger.info(f"Executing: {cmd}")
+        audit_log(self.settings, "command_executed", {"cmd": cmd, "cwd": cwd, "background": background}, approved=True)
+        self.logger.info(f"Executing: {cmd} {'[BACKGROUND]' if background else ''}")
+
+        cmd_strip = cmd.strip().lower()
+        # Auto-detect long running servers if background not explicitly set
+        if background or cmd_strip.startswith("start ") or cmd_strip.startswith("npm start") or cmd_strip.startswith("npm run dev") or cmd_strip.startswith("node server") or cmd_strip.startswith("node index") or cmd_strip.startswith("node app") or cmd_strip.startswith("python -m http.server"):
+            try:
+                proc = subprocess.Popen(
+                    cmd,
+                    shell=True,
+                    cwd=cwd,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    creationflags=getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0),
+                )
+                return {
+                    "success": True,
+                    "background": True,
+                    "pid": proc.pid,
+                    "stdout": f"Started in background (PID: {proc.pid})",
+                    "stderr": "",
+                    "returncode": 0,
+                    "approved": approved,
+                }
+            except Exception as e:
+                return {"success": False, "error": str(e), "stdout": "", "stderr": "", "returncode": -1}
 
         effective_timeout = timeout or self.settings.max_command_timeout_sec
         t0 = time.time()
 
         try:
-            proc = subprocess.run(
-                cmd,
-                shell=True,
-                capture_output=True,
-                text=True,
-                cwd=cwd,
-                timeout=effective_timeout,
-                encoding="utf-8",
-                errors="replace",
-            )
+            loop = asyncio.get_running_loop()
+            def _run():
+                return subprocess.run(
+                    cmd,
+                    shell=True,
+                    capture_output=True,
+                    text=True,
+                    cwd=cwd,
+                    timeout=effective_timeout,
+                    encoding="utf-8",
+                    errors="replace",
+                )
+            proc = await loop.run_in_executor(None, _run)
             duration = round(time.time() - t0, 3)
             return {
                 "success": proc.returncode == 0,
@@ -84,6 +112,6 @@ class CommandEngine:
                 "approved": approved,
             }
         except subprocess.TimeoutExpired:
-            return {"success": False, "error": f"Command timed out after {effective_timeout}s", "stdout": "", "stderr": "", "returncode": -1}
+            return {"success": False, "error": f"Command timed out after {effective_timeout}s (Tip: use \"background\": true for servers/long scripts)", "stdout": "", "stderr": "", "returncode": -1}
         except Exception as e:
             return {"success": False, "error": str(e), "stdout": "", "stderr": "", "returncode": -1}

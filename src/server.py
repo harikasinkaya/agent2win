@@ -284,7 +284,12 @@ All actions from REST are available via WebSocket JSON messages.</div>
     async def handle_command(self, request):
         if not self._check_auth(request): return self._unauthorized()
         data = await self._parse_json(request)
-        result = await self.commands.execute(data.get("cmd", ""), cwd=data.get("cwd"), timeout=data.get("timeout"))
+        result = await self.commands.execute(
+            data.get("cmd", ""),
+            cwd=data.get("cwd"),
+            timeout=data.get("timeout"),
+            background=bool(data.get("background", False))
+        )
         return self._json_response(result)
 
     # ─── Screen ────────────────────────────────────────────────────────
