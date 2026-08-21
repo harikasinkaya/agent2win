@@ -1,8 +1,8 @@
-🚀 **agent2win: Control Windows with Web AIs (ChatGPT, Gemini, Grok, Claude)!**
+🚀 **agent2win: Control Windows with Web & curl-Capable AIs (Arena.ai, ChatGPT, Claude, Grok)!**
 
 Hey everyone! 👋
 
-I built **`agent2win`**, an open-source bridge allowing web-based AIs (ChatGPT, Gemini, Grok, Claude) or cloud frameworks (LangChain, AutoGen) to remotely control your Windows PC/Server via REST & WebSocket!
+I built **`agent2win`**, an open-source bridge allowing curl-enabled agents (like Arena.ai), web-based AIs (ChatGPT, Claude, Grok), or cloud frameworks (LangChain, AutoGen) to remotely control your Windows PC/Server via REST & WebSocket!
 
 📦 **Install:** `pip install agent2win`
 
@@ -24,10 +24,10 @@ I built **`agent2win`**, an open-source bridge allowing web-based AIs (ChatGPT, 
 pip install agent2win
 agent2win
 ```
-*(Console will print: `🌐 Tunnel: https://xxxx.trycloudflare.com`)*
+*(Console will print: `🌐 Public Tunnel: https://xxxx.trycloudflare.com`)*
 
-**2. Connect Any Web AI:**
-Paste this prompt into ChatGPT / Gemini / Grok / Claude:
+**2. Connect Any AI / curl Agent:**
+Paste this prompt into Arena.ai / ChatGPT / Claude / Grok:
 ```markdown
 Read the official agent2win control protocol from this URL:
 https://raw.githubusercontent.com/harikasinkaya/agent2win/refs/heads/main/AGENT_PROTOCOL.md

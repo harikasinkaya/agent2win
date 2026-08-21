@@ -4,7 +4,7 @@
 
 ### Universal Bridge Between Web / Cloud AI Agents & Windows OS
 
-**Control your Windows PC or Server directly from web-based AI platforms like ChatGPT, Gemini, Grok, Claude, or custom cloud agents.**
+**Control your Windows PC or Server directly from curl-enabled AI agents (e.g. Arena.ai), ChatGPT Actions, Claude, Grok, and autonomous LLMs.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://python.org)
@@ -15,8 +15,8 @@
 
 ---
 
-> 💡 **Turn Any Web AI Into a Windows Agent:**  
-> Any AI model or platform with web/API browsing capabilities (**ChatGPT / Custom GPTs**, **Gemini**, **Grok**, **Claude**, **OpenAI Assistants**, **LangChain**, **CrewAI**) can be transformed into an autonomous computer-use agent to control your local Windows PC or remote Windows Server via secure REST / WebSocket endpoints.
+> 💡 **Turn Any Web AI / curl-Capable Agent Into a Windows Operator:**  
+> Any AI platform or model with HTTP/curl or web browsing capabilities (**Arena.ai**, **ChatGPT / Custom Actions**, **Grok**, **Claude**, **OpenAI Assistants**, **LangChain**, **CrewAI**) can execute native curl requests to interact with and control your Windows machine remotely via secure REST / WebSocket endpoints.
 
 ---
 
@@ -24,12 +24,12 @@
 
 **agent2win** is a lightweight, high-performance middleware server for Windows. It exposes a unified REST & WebSocket API, instantly accessible over the public internet through automatic Cloudflare or ngrok tunnels with zero router configuration.
 
-Whether you are building custom autonomous agents or connecting conversational web AIs (chatgpt.com, gemini.google.com, grok.com) via Custom Actions / API tools, **agent2win** provides full control over your OS environment.
+Whether you are using AI environments executing curl requests in their sandboxes (like **Arena.ai**), connecting Custom Actions via **ChatGPT**, or driving automation loops with **Claude**, **agent2win** gives external models complete programmatic control over your OS.
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
 │ Web & Cloud AI Ecosystem                                         │
-│ • chatgpt.com (Custom GPTs / Actions)   • gemini.google.com      │
+│ • Arena.ai & curl-capable agents        • chatgpt.com (Actions)  │
 │ • grok.com / xAI                        • claude.ai / Anthropic  │
 │ • Autonomous Frameworks (LangChain, CrewAI, AutoGen, AutoGPT)    │
 └─────────────────────────────────┬────────────────────────────────┘
@@ -38,6 +38,17 @@ Whether you are building custom autonomous agents or connecting conversational w
 ┌──────────────────────────────────────────────────────────────────┐
 │ Cloudflare / ngrok Public Tunnel (Zero Port-Forwarding)          │
 └─────────────────────────────────┬────────────────────────────────┘
+                                  │
+                                  ▼
+┌──────────────────────────────────────────────────────────────────┐
+│ agent2win Server (:7770)                                         │
+├─────────────────────────────────┬────────────────────────────────┤
+│ • Screen & Window Capture       │ • Mouse & Keyboard Emulation   │
+│ • Shell & Command Runner        │ • Virtual Desktop Isolation    │
+│ • Filesystem & Registry         │ • Process & Service Manager    │
+│ • Clipboard & Audio Controls    │ • Security & Approval Layer    │
+└─────────────────────────────────┴────────────────────────────────┘
+```
                                   │
                                   ▼
 ┌──────────────────────────────────────────────────────────────────┐
@@ -98,10 +109,10 @@ Connect your AI agent (e.g. ChatGPT Custom Action schema, LangChain tool, or web
 
 ---
 
-## 🤖 Using With Web AIs (ChatGPT, Gemini, Grok, Claude)
+## 🤖 Using With Web AIs & curl-Capable Platforms (Arena.ai, ChatGPT, Claude, Grok)
 
-### 📋 Direct Prompt to Connect Any Web AI
-Copy and paste this prompt directly into **ChatGPT, Gemini, Grok, Claude, or any web AI with browsing/fetching capabilities**:
+### 📋 Direct Prompt to Connect Any AI / Agent
+Copy and paste this prompt directly into **Arena.ai, ChatGPT, Claude, Grok, or any AI capable of web fetching or executing curl requests**:
 
 ```markdown
 Read the official agent2win control protocol from this URL:
@@ -114,14 +125,37 @@ My API key is: <PASTE_YOUR_API_KEY_OR_LEAVE_EMPTY>
 Please inspect the system info, capture the screen, and follow my instructions to control my Windows machine.
 ```
 
+### ⚡ Example curl Commands Executed by Agents (e.g. Arena.ai)
+Agents running in terminal/bash environments can issue direct curl requests:
+
+```bash
+# 1. Get system info & active window
+curl -X GET "https://xxxx.trycloudflare.com/api/info"
+
+# 2. Capture desktop screen
+curl -X GET "https://xxxx.trycloudflare.com/api/screen"
+
+# 3. Click at screen coordinates
+curl -X POST "https://xxxx.trycloudflare.com/api/mouse/click" \
+     -H "Content-Type: application/json" \
+     -d '{"x": 500, "y": 300, "button": "left"}'
+
+# 4. Type text
+curl -X POST "https://xxxx.trycloudflare.com/api/keyboard/type" \
+     -H "Content-Type: application/json" \
+     -d '{"text": "Hello from AI Agent", "unicode": true}'
+
+# 5. Run shell command
+curl -X POST "https://xxxx.trycloudflare.com/api/command" \
+     -H "Content-Type: application/json" \
+     -d '{"cmd": "dir C:\\"}'
+```
+
 ### ChatGPT Custom GPTs / Actions
 1. Open ChatGPT -> Create a GPT -> Configure -> **Add Action**.
 2. Set Server URL to your tunnel address (`https://xxxx.trycloudflare.com`).
 3. Set Authentication to **API Key** (Bearer token) if configured.
 4. Import endpoints from `AGENT_PROTOCOL.md` to let ChatGPT inspect your screen, run commands, and click UI elements.
-
-### Gemini, Grok & Cloud Agents
-Pass the public tunnel URL and API endpoints into your agent execution loop. The agent can take screenshots (`/api/screen`), process images with vision models, and issue input commands (`/api/mouse/click`, `/api/keyboard/type`).
 
 ---
 

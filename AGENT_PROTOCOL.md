@@ -1,6 +1,6 @@
 # 🤖 Agent Protocol — How to Use agent2win
 
-> **For AI Agents & LLMs (ChatGPT, Gemini, Grok, Claude, LangChain, Custom GPTs, etc.).**  
+> **For AI Agents & LLMs (Arena.ai, ChatGPT, Claude, Grok, curl-capable agents, Custom GPTs, etc.).**  
 > Read this protocol to control a Windows PC or Windows Server remotely via REST API.
 
 ## Connection
