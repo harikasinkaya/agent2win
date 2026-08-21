@@ -1033,18 +1033,14 @@ All actions from REST are available via WebSocket JSON messages.</div>
         site = web.TCPSite(self._runner, self.settings.host, self.settings.port)
         await site.start()
 
-        self.logger.info(f"═══════════════════════════════════════════")
-        self.logger.info(f"  agent2win Server v1.0.3")
-        self.logger.info(f"  Listening on http://{self.settings.host}:{self.settings.port}")
-        self.logger.info(f"  Unrestricted mode: {'ON ⚠️' if self.settings.unrestricted_mode else 'OFF 🔒'}")
-        self.logger.info(f"═══════════════════════════════════════════")
+        self.logger.info(f"🚀 Server listening on http://{self.settings.host}:{self.settings.port}")
 
         if self.settings.tunnel_provider != "none":
             tunnel_result = self.tunnel.start(self.settings.port)
             if tunnel_result.get("success") and tunnel_result.get("url"):
-                self.logger.info(f"  🌐 Tunnel: {tunnel_result['url']}")
+                self.logger.info(f"🌐 Public Tunnel : {tunnel_result['url']}")
             elif not tunnel_result.get("success"):
-                self.logger.warning(f"  ⚠️ Tunnel failed: {tunnel_result.get('error')}")
+                self.logger.warning(f"⚠️ Tunnel failed: {tunnel_result.get('error')}")
 
         try:
             while True:

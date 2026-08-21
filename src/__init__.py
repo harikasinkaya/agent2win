@@ -1,3 +1,3 @@
 # agent2win - Universal Bridge Between Web/Cloud AI Agents & Windows OS
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 __author__ = "agent2win"

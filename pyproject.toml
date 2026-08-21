@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent2win"
-version = "1.0.3"
+version = "1.0.4"
 description = "Universal Bridge Between Web/Cloud AI Agents (ChatGPT, Gemini, Grok, Claude) & Windows OS"
 readme = "README.md"
 authors = [

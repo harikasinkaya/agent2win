@@ -79,21 +79,38 @@ def main():
         gui.show()
         return
 
-    # Print banner
-    print(r"""
-    ╔═══════════════════════════════════════════════════════╗
-    ║         🚀  agent2win  v1.0.0                         ║
-    ║  Bridge Web/Cloud AI (ChatGPT, Gemini, Grok) to Win   ║
-    ╠═══════════════════════════════════════════════════════╣
-    ║  Server:  http://0.0.0.0:{port:<5}                      ║
-    ║  Mode:    {mode:<20}                   ║
-    ║  Tunnel:  {tunnel:<20}                   ║
-    ╚═══════════════════════════════════════════════════════╝
-    """.format(
-        port=settings.port,
-        mode="UNRESTRICTED ⚠️" if settings.unrestricted_mode else "SECURE 🔒",
-        tunnel=settings.tunnel_provider,
-    ))
+    # Clear terminal screen
+    os.system("cls" if os.name == "nt" else "clear")
+
+    CYAN = "\033[96m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    GRAY = "\033[90m"
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
+
+    mode_str = f"{YELLOW}UNRESTRICTED (No prompts){RESET}" if settings.unrestricted_mode else f"{GREEN}SECURE (Approval on){RESET}"
+    auth_str = f"{GREEN}Enabled (Bearer token){RESET}" if settings.api_key else f"{GRAY}Disabled (Open){RESET}"
+    tray_str = f"{GREEN}Active{RESET}" if not args.no_tray else f"{GRAY}Disabled{RESET}"
+
+    banner = f"""
+{CYAN}{BOLD}                      __ ___          _
+  ____ _____ ____  ____  / /_|__ \_      __(_)___
+ / __ `/ __ `/ _ \/ __ \/ __/_/ /| | /| / / / __ \
+/ /_/ / /_/ /  __/ / / / /_/ __/ | |/ |/ / / / / /
+\__,_/\__, /\___/_/ /_/\__/____/ |__/|__/_/_/ /_/
+     /____/                                          {RESET}
+{GRAY}  Universal Bridge Between Web/Cloud AI Agents & Windows OS {CYAN}v1.0.4{RESET}
+{GRAY}─────────────────────────────────────────────────────────────────────────────{RESET}
+  {BOLD}Local API   :{RESET} {CYAN}http://{settings.host}:{settings.port}{RESET}
+  {BOLD}Auth Token  :{RESET} {auth_str}
+  {BOLD}Security    :{RESET} {mode_str}
+  {BOLD}System Tray :{RESET} {tray_str}
+  {BOLD}Tunnel Mode :{RESET} {settings.tunnel_provider}
+{GRAY}─────────────────────────────────────────────────────────────────────────────{RESET}
+  {GRAY}* Press {YELLOW}Ctrl+C{GRAY} to gracefully stop the middleware server{RESET}
+"""
+    print(banner)
 
     # Create server first so we can pass notifications to tray
     server = ArenaServer(settings)
@@ -104,19 +121,13 @@ def main():
         try:
             tray = TrayApp(settings, server.notifications, settings.port)
             tray.start()
-            print("  ✅ System tray icon active")
         except Exception as e:
-            print(f"  ⚠️ System tray unavailable: {e}")
-
-    # Start server
-    print(f"  🚀 Starting server on port {settings.port}...")
-    print(f"  📖 Open http://localhost:{settings.port} for API docs")
-    print(f"  ⏹️  Press Ctrl+C to stop\n")
+            pass
 
     try:
         asyncio.run(server.start())
     except KeyboardInterrupt:
-        print("\n  👋 Shutting down...")
+        print(f"\n  {YELLOW}👋 agent2win shutting down...{RESET}")
     finally:
         if tray:
             tray.stop()
