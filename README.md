@@ -100,6 +100,20 @@ Connect your AI agent (e.g. ChatGPT Custom Action schema, LangChain tool, or web
 
 ## 🤖 Using With Web AIs (ChatGPT, Gemini, Grok, Claude)
 
+### 📋 Direct Prompt to Connect Any Web AI
+Copy and paste this prompt directly into **ChatGPT, Gemini, Grok, Claude, or any web AI with browsing/fetching capabilities**:
+
+```markdown
+Read the official agent2win control protocol from this URL:
+https://raw.githubusercontent.com/harikasinkaya/agent2win/refs/heads/main/AGENT_PROTOCOL.md
+
+You are now an autonomous Windows controller agent.
+My agent2win server URL is: <PASTE_YOUR_TUNNEL_URL_HERE>
+My API key is: <PASTE_YOUR_API_KEY_OR_LEAVE_EMPTY>
+
+Please inspect the system info, capture the screen, and follow my instructions to control my Windows machine.
+```
+
 ### ChatGPT Custom GPTs / Actions
 1. Open ChatGPT -> Create a GPT -> Configure -> **Add Action**.
 2. Set Server URL to your tunnel address (`https://xxxx.trycloudflare.com`).

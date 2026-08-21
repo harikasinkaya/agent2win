@@ -6,7 +6,8 @@
       "PowerShell(python -m build)",
       "PowerShell($env:TWINE_PASSWORD = $null; $env:TWINE_USERNAME = $null)",
       "PowerShell(gh auth *)",
-      "PowerShell(git *)"
+      "PowerShell(git *)",
+      "PowerShell(git commit *)"
     ]
   }
 }
