@@ -57,7 +57,7 @@ def main():
     # Load settings
     settings = Settings.load()
 
-    # Apply CLI overrides
+    # Apply CLI overrides (do not permanently mutate default config unless requested)
     if args.port:
         settings.port = args.port
     if args.host:
@@ -68,10 +68,11 @@ def main():
         settings.unrestricted_mode = True
     if args.no_tunnel:
         settings.tunnel_provider = "none"
-    if args.tunnel:
+    elif args.tunnel:
         settings.tunnel_provider = args.tunnel
-
-    settings.save()
+    elif not settings.tunnel_provider or settings.tunnel_provider == "none":
+        # Default to cloudflared unless user explicitly said --no-tunnel
+        settings.tunnel_provider = "cloudflared"
 
     # Settings GUI mode
     if args.settings:

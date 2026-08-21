@@ -29,14 +29,18 @@ class TunnelManager:
 
     def _find_cloudflared(self) -> Optional[str]:
         """Find cloudflared binary."""
-        # Check PATH
-        path = shutil.which("cloudflared")
-        if path:
-            return path
+        # Check PATH (exe and cmd)
+        for name in ["cloudflared.exe", "cloudflared.cmd", "cloudflared"]:
+            path = shutil.which(name)
+            if path:
+                return path
         # Check common locations
         common = [
             os.path.expanduser("~\\AppData\\Local\\cloudflared\\cloudflared.exe"),
+            os.path.expanduser("~\\AppData\\Roaming\\npm\\cloudflared.cmd"),
+            os.path.expanduser("~\\AppData\\Roaming\\npm\\cloudflared.ps1"),
             "C:\\cloudflared\\cloudflared.exe",
+            "C:\\Program Files\\cloudflared\\cloudflared.exe",
             os.path.join(os.path.dirname(__file__), "..", "bin", "cloudflared.exe"),
         ]
         for p in common:

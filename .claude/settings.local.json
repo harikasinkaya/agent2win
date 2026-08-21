@@ -10,7 +10,9 @@
       "PowerShell(git commit *)",
       "PowerShell(agent2win *)",
       "PowerShell(Receive-Job *)",
-      "PowerShell(\\(Get-Content forum.txt -Raw\\).Length)"
+      "PowerShell(\\(Get-Content forum.txt -Raw\\).Length)",
+      "PowerShell(Get-Content *)",
+      "PowerShell($cfgPath = \"$env:APPDATA\\\\agent2win\\\\config.json\"; if \\(Test-Path $cfgPath\\) { \\(Get-Content $cfgPath\\) -replace '\"tunnel_provider\": \"none\"', '\"tunnel_provider\": \"cloudflared\"' | Set-Content $cfgPath })"
     ]
   }
 }
