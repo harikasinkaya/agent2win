@@ -14,10 +14,11 @@ def setup_logger(settings: Settings) -> logging.Logger:
     logger = logging.getLogger("agent2win")
     logger.setLevel(getattr(logging, settings.log_level.upper(), logging.INFO))
 
-    fmt = logging.Formatter("[%(asctime)s] %(levelname)s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+    fmt = logging.Formatter("\033[90m[%(asctime)s]\033[0m \033[94m%(levelname)s\033[0m | %(message)s", datefmt="%H:%M:%S")
+    file_fmt = logging.Formatter("[%(asctime)s] %(levelname)s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
     fh = logging.FileHandler(log_path, encoding="utf-8")
-    fh.setFormatter(fmt)
+    fh.setFormatter(file_fmt)
     logger.addHandler(fh)
 
     ch = logging.StreamHandler()

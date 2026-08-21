@@ -81,22 +81,21 @@ def main():
     auth_str = f"{GREEN}Enabled (Bearer token){RESET}" if settings.api_key else f"{GRAY}Disabled (Open){RESET}"
     tray_str = f"{GREEN}Active{RESET}" if not args.no_tray else f"{GRAY}Disabled{RESET}"
 
-    banner = f"""
-{CYAN}{BOLD}                      __ ___          _
-  ____ _____ ____  ____  / /_|__ \_      __(_)___
- / __ `/ __ `/ _ \/ __ \/ __/_/ /| | /| / / / __ \
-/ /_/ / /_/ /  __/ / / / /_/ __/ | |/ |/ / / / / /
-\__,_/\__, /\___/_/ /_/\__/____/ |__/|__/_/_/ /_/
-     /____/                                          {RESET}
-{GRAY}  Universal Bridge Between Web/Cloud AI Agents & Windows OS {CYAN}v1.0.4{RESET}
+    # Clean ASCII logo with raw string blocks
+    banner = f"""{CYAN}{BOLD}
+   ___   ______  ____ _   __   ___   _       __ ____ _   __
+  / _ | / ___/ |/ / // | / /  |_  | | |     / //  _// | / /
+ / __ |/ (_ //    // /| |/ /  / __/  | | /| / /_/ / /  |/ /
+/_/ |_|\___//_/|_//_/ |_/_/  /____/  |__/|__//___//_/|_/
+{RESET}{GRAY} Universal Bridge Between Web/Cloud AI Agents & Windows OS  {CYAN}v1.0.5{RESET}
 {GRAY}─────────────────────────────────────────────────────────────────────────────{RESET}
-  {BOLD}Local API   :{RESET} {CYAN}http://{settings.host}:{settings.port}{RESET}
-  {BOLD}Auth Token  :{RESET} {auth_str}
-  {BOLD}Security    :{RESET} {mode_str}
-  {BOLD}System Tray :{RESET} {tray_str}
-  {BOLD}Tunnel Mode :{RESET} {settings.tunnel_provider}
+  {BOLD}Local Endpoint :{RESET} {CYAN}http://{settings.host}:{settings.port}{RESET}
+  {BOLD}Authentication :{RESET} {auth_str}
+  {BOLD}Security Mode  :{RESET} {mode_str}
+  {BOLD}System Tray    :{RESET} {tray_str}
+  {BOLD}Tunnel Provider:{RESET} {settings.tunnel_provider}
 {GRAY}─────────────────────────────────────────────────────────────────────────────{RESET}
-  {GRAY}* Press {YELLOW}Ctrl+C{GRAY} to gracefully stop the middleware server{RESET}
+  {GRAY}* Press {YELLOW}Ctrl+C{GRAY} in terminal to gracefully shutdown{RESET}
 """
     print(banner)
 
