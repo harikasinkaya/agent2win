@@ -98,8 +98,19 @@ class ArenaServer:
 
         return web.json_response(data, status=status, content_type="application/json", dumps=lambda o: json.dumps(o, default=default_encoder))
 
-    def _unauthorized(self) -> web.Response:
-        return self._json_response({"error": "Unauthorized"}, 401)
+    async def _parse_json(self, request: web.Request) -> dict:
+        """Parse JSON body safely, handling Windows backslashes and invalid escape characters from LLMs/cURL."""
+        try:
+            return await self._parse_json(request)
+        except Exception:
+            try:
+                raw_text = await request.text()
+                # Clean or fix invalid JSON escape characters (e.g. \U, \D, \e from Windows paths)
+                import re
+                fixed = re.sub(r'\\(?![/\"\\bfnrt]|u[0-9a-fA-F]{4})', r'\\\\', raw_text)
+                return json.loads(fixed, strict=False)
+            except Exception:
+                return {}
 
     # ─── Index ─────────────────────────────────────────────────────────
 
@@ -272,7 +283,7 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_command(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        data = await request.json()
+        data = await self._parse_json(request)
         result = await self.commands.execute(data.get("cmd", ""), cwd=data.get("cwd"), timeout=data.get("timeout"))
         return self._json_response(result)
 
@@ -291,29 +302,29 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_mouse_click(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.input.mouse_click(d["x"], d["y"], d.get("button", "left"), d.get("clicks", 1)))
 
     async def handle_mouse_move(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.input.mouse_move(d["x"], d["y"]))
 
     async def handle_mouse_scroll(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.input.mouse_scroll(d["clicks"], d.get("x"), d.get("y")))
 
     async def handle_mouse_drag(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.input.mouse_drag(d["x1"], d["y1"], d["x2"], d["y2"]))
 
     # ─── Keyboard ──────────────────────────────────────────────────────
 
     async def handle_keyboard_type(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         text = d.get("text", "")
         if d.get("unicode") or not text.isascii():
             return self._json_response(await self.input.type_unicode(text))
@@ -321,12 +332,12 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_keyboard_press(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.input.press_key(d["key"]))
 
     async def handle_keyboard_hotkey(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.input.hotkey(*d["keys"]))
 
     # ─── Files ─────────────────────────────────────────────────────────
@@ -341,17 +352,17 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_files_write(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.filesystem.write_file(d["path"], d["content"]))
 
     async def handle_files_delete(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.filesystem.delete_file(d["path"]))
 
     async def handle_files_mkdir(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.filesystem.create_dir(d["path"]))
 
     async def handle_files_drives(self, request):
@@ -370,12 +381,12 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_processes_launch(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.processes.launch_program(d["path"], d.get("args", ""), d.get("cwd")))
 
     async def handle_processes_kill(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.processes.kill_process(d["pid"]))
 
     # ─── Windows ───────────────────────────────────────────────────────
@@ -394,62 +405,62 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_windows_focus(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.focus_window(d["hwnd"]))
 
     async def handle_windows_focus_title(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.focus_by_title(d["title"]))
 
     async def handle_windows_minimize(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.minimize_window(d["hwnd"]))
 
     async def handle_windows_maximize(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.maximize_window(d["hwnd"]))
 
     async def handle_windows_resize(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.resize_window(d["hwnd"], d["width"], d["height"]))
 
     async def handle_windows_move(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.move_window(d["hwnd"], d["x"], d["y"]))
 
     async def handle_windows_geometry(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.set_window_geometry(d["hwnd"], d["x"], d["y"], d["width"], d["height"]))
 
     async def handle_windows_close(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.close_window(d["hwnd"]))
 
     async def handle_windows_hide(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.hide_window(d["hwnd"]))
 
     async def handle_windows_show(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.show_window(d["hwnd"]))
 
     async def handle_windows_screenshot(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.screenshot_window(d["hwnd"]))
 
     async def handle_windows_tile(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.windows.tile_windows(d["hwnds"], d.get("cols", 2)))
 
     # ─── Virtual Desktops ──────────────────────────────────────────────
@@ -460,12 +471,12 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_desktops_create(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.desktops.create_desktop(d.get("name", "agent2win Agent")))
 
     async def handle_desktops_switch(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.desktops.switch_to_desktop(d["index"]))
 
     async def handle_desktops_switch_agent(self, request):
@@ -478,12 +489,12 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_desktops_move_window(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.desktops.move_window_to_desktop(d["hwnd"], d["desktop"]))
 
     async def handle_desktops_remove(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.desktops.remove_desktop(d["index"]))
 
     async def handle_desktops_setup(self, request):
@@ -498,7 +509,7 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_clipboard_set(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.clipboard.set_text(d["text"]))
 
     async def handle_clipboard_clear(self, request):
@@ -513,7 +524,7 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_audio_set_volume(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.audio.set_volume(d["level"]))
 
     async def handle_audio_mute(self, request):
@@ -530,12 +541,12 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_audio_volume_up(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.audio.volume_up(d.get("step", 5)))
 
     async def handle_audio_volume_down(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.audio.volume_down(d.get("step", 5)))
 
     async def handle_audio_devices(self, request):
@@ -562,27 +573,27 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_network_ping(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.network.ping(d["host"], d.get("count", 4)))
 
     async def handle_network_traceroute(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.network.traceroute(d["host"]))
 
     async def handle_network_nslookup(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.network.nslookup(d["domain"]))
 
     async def handle_network_download(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.network.download_file(d["url"], d["save_path"]))
 
     async def handle_network_check_port(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.network.check_port(d["host"], d["port"]))
 
     # ─── Power ─────────────────────────────────────────────────────────
@@ -593,12 +604,12 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_power_shutdown(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.power.shutdown(d.get("delay_sec", 0)))
 
     async def handle_power_restart(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.power.restart(d.get("delay_sec", 0)))
 
     async def handle_power_cancel(self, request):
@@ -629,39 +640,39 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_services_start(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.services.start_service(d["name"]))
 
     async def handle_services_stop(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.services.stop_service(d["name"]))
 
     async def handle_services_restart(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.services.restart_service(d["name"]))
 
     # ─── Registry ──────────────────────────────────────────────────────
 
     async def handle_registry_read(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.registry.read_key(d["hive"], d["path"], d.get("name", "")))
 
     async def handle_registry_list(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.registry.list_subkeys(d["hive"], d["path"]))
 
     async def handle_registry_write(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.registry.write_key(d["hive"], d["path"], d["name"], d["value"], d.get("type", "string")))
 
     async def handle_registry_delete(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.registry.delete_key(d["hive"], d["path"], d.get("name", "")))
 
     # ─── Environment ───────────────────────────────────────────────────
@@ -672,7 +683,7 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_env_set(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         return self._json_response(await self.environment.set_env_var(d["name"], d["value"], d.get("scope", "user")))
 
     async def handle_env_path(self, request):
@@ -699,7 +710,7 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_approvals_approve(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         if d.get("request_id"):
             return self._json_response({"success": self.notifications.approve_request(d["request_id"])})
         elif d.get("all"):
@@ -709,7 +720,7 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_approvals_deny(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         if d.get("request_id"):
             return self._json_response({"success": self.notifications.deny_request(d["request_id"])})
         elif d.get("all"):
@@ -726,7 +737,7 @@ All actions from REST are available via WebSocket JSON messages.</div>
 
     async def handle_settings_update(self, request):
         if not self._check_auth(request): return self._unauthorized()
-        d = await request.json()
+        d = await self._parse_json(request)
         self.settings.update(**d)
         return self._json_response({"success": True})
 
