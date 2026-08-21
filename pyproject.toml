@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent2win"
-version = "1.0.1"
+version = "1.0.2"
 description = "Universal Bridge Between Web/Cloud AI Agents (ChatGPT, Gemini, Grok, Claude) & Windows OS"
 readme = "README.md"
 authors = [
@@ -32,7 +32,7 @@ dependencies = [
     "psutil>=5.9.0",
     "pycaw>=20230407; platform_system=='Windows'",
     "comtypes>=1.4.1; platform_system=='Windows'",
-    "pyvda>=1.0.0; platform_system=='Windows'",
+    "pyvda>=0.6.0; platform_system=='Windows'",
     "pystray>=0.19.0; platform_system=='Windows'",
     "win10toast>=0.9; platform_system=='Windows'",
 ]

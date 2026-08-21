@@ -7,7 +7,9 @@
       "PowerShell($env:TWINE_PASSWORD = $null; $env:TWINE_USERNAME = $null)",
       "PowerShell(gh auth *)",
       "PowerShell(git *)",
-      "PowerShell(git commit *)"
+      "PowerShell(git commit *)",
+      "PowerShell(agent2win *)",
+      "PowerShell(Receive-Job *)"
     ]
   }
 }
