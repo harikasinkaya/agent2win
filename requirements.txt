@@ -1,0 +1,27 @@
+# Windows Arena AI — Dependencies
+# Core (required)
+aiohttp>=3.9.0
+
+# Screen capture (recommended)
+Pillow>=10.0.0
+mss>=9.0.0
+
+# Mouse & keyboard control (recommended)
+pyautogui>=0.9.54
+pyperclip>=1.8.0
+
+# Process management (recommended)
+psutil>=5.9.0
+
+# Audio control (recommended)
+pycaw>=20230407
+comtypes>=1.4.1
+
+# Virtual desktops (recommended)
+pyvda>=1.0.0
+
+# System tray (optional, Windows only)
+pystray>=0.19.0
+
+# Windows notifications (optional, Windows only)
+win10toast>=0.9

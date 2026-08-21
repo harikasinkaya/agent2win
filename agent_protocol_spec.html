@@ -1,0 +1,706 @@
+<title>agent2win Protocol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-page: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-card-subtle: #f1f5f9;
+    --bg-code: #0f172a;
+    --border-color: #e2e8f0;
+    --border-subtle: #edf2f7;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+    --accent: #0284c7;
+    --accent-light: #e0f2fe;
+    --badge-get: #10b981;
+    --badge-get-bg: #ecfdf5;
+    --badge-post: #3b82f6;
+    --badge-post-bg: #eff6ff;
+    --badge-ws: #8b5cf6;
+    --badge-ws-bg: #f5f3ff;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', Consolas, "Courier New", monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg-page: #0b0f19;
+      --bg-card: #111827;
+      --bg-card-subtle: #172033;
+      --bg-code: #070a11;
+      --border-color: #1f293d;
+      --border-subtle: #192237;
+      --text-main: #f3f4f6;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent: #38bdf8;
+      --accent-light: #0c4a6e;
+      --badge-get: #34d399;
+      --badge-get-bg: #064e3b;
+      --badge-post: #60a5fa;
+      --badge-post-bg: #1e3a8a;
+      --badge-ws: #a78bfa;
+      --badge-ws-bg: #4c1d95;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg-page: #0b0f19;
+    --bg-card: #111827;
+    --bg-card-subtle: #172033;
+    --bg-code: #070a11;
+    --border-color: #1f293d;
+    --border-subtle: #192237;
+    --text-main: #f3f4f6;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --accent: #38bdf8;
+    --accent-light: #0c4a6e;
+    --badge-get: #34d399;
+    --badge-get-bg: #064e3b;
+    --badge-post: #60a5fa;
+    --badge-post-bg: #1e3a8a;
+    --badge-ws: #a78bfa;
+    --badge-ws-bg: #4c1d95;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 60px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  /* Header */
+  header {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 36px;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .brand-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-light);
+    color: var(--accent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .lead {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 850px;
+    margin-bottom: 24px;
+  }
+
+  .badges-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card-subtle);
+    color: var(--text-muted);
+  }
+
+  /* Search & Filter */
+  .search-wrapper {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .search-input {
+    flex: 1;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    padding: 12px 16px;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .search-input:focus {
+    border-color: var(--accent);
+  }
+
+  /* Quick Flow Callout */
+  .workflow-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+
+  .workflow-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .step-item {
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .step-desc {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  /* Sections Layout */
+  .section-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 36px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .endpoints-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .endpoint-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 16px 20px;
+    transition: transform 0.1s ease, border-color 0.1s ease;
+  }
+
+  .endpoint-card:hover {
+    border-color: var(--accent);
+  }
+
+  .endpoint-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .method-badge {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .method-badge.get {
+    background: var(--badge-get-bg);
+    color: var(--badge-get);
+  }
+
+  .method-badge.post {
+    background: var(--badge-post-bg);
+    color: var(--badge-post);
+  }
+
+  .method-badge.ws {
+    background: var(--badge-ws-bg);
+    color: var(--badge-ws);
+  }
+
+  .endpoint-path {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .endpoint-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .code-container {
+    overflow-x: auto;
+    background: var(--bg-code);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #e2e8f0;
+    margin-top: 8px;
+  }
+
+  .code-container pre {
+    white-space: pre;
+    font-family: inherit;
+  }
+
+  .param-tag {
+    color: #38bdf8;
+  }
+
+  .string-val {
+    color: #4ade80;
+  }
+
+  .num-val {
+    color: #f59e0b;
+  }
+
+  /* Copy button */
+  .copy-btn {
+    margin-left: auto;
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 60px;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    header {
+      padding: 24px 18px;
+    }
+    h1 {
+      font-size: 1.7rem;
+    }
+    .endpoint-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .copy-btn {
+      margin-left: 0;
+    }
+  }
+</style>
+
+<div class="container">
+  <header>
+    <div class="brand-tag">🤖 AGENT SPECIFICATION</div>
+    <h1>agent2win Protocol & API Specification</h1>
+    <p class="lead">Standard HTTP REST and WebSocket interface for AI Agents (ChatGPT, Gemini, Grok, Claude, Custom GPTs, LangChain) to monitor, interact with, and automate Windows PC / Server environments.</p>
+
+    <div class="badges-row">
+      <span class="pill">⚡ Port: 7770</span>
+      <span class="pill">🔒 Auth: Bearer Token</span>
+      <span class="pill">🌐 Tunnel: Cloudflare / ngrok</span>
+      <span class="pill">🖥️ PyPI: agent2win v1.0.0</span>
+      <span class="pill">🔌 WebSocket: /ws</span>
+    </div>
+
+    <div class="search-wrapper">
+      <input type="text" id="apiSearch" class="search-input" placeholder="🔍 Search endpoints (e.g. /api/screen, click, virtual desktop, registry, audio)..." oninput="filterEndpoints()">
+    </div>
+  </header>
+
+  <!-- Background Isolated Workflow -->
+  <div class="workflow-box">
+    <div class="workflow-title">
+      <span>🖥️ Recommended Background Execution Workflow</span>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+      Agents can isolate their active work on a secondary virtual desktop so the human operator can watch videos or work uninterrupted on Desktop 1.
+    </p>
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-num">STEP 1</div>
+        <div class="step-desc"><code>POST /api/desktops/setup</code><br>Create agent workspace</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">STEP 2</div>
+        <div class="step-desc"><code>POST /api/desktops/switch_agent</code><br>Shift context to agent workspace</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">STEP 3</div>
+        <div class="step-desc"><code>GET /api/screen</code> & <code>/api/mouse/click</code><br>Inspect & run tasks</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">STEP 4</div>
+        <div class="step-desc"><code>POST /api/desktops/switch_user</code><br>Return view back to user</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="endpointList">
+
+    <!-- 1. System & Authentication -->
+    <h2 class="section-title">⚡ 1. System & Information</h2>
+    <div class="endpoints-grid">
+      <div class="endpoint-card" data-search="info system os hardware memory uptime">
+        <div class="endpoint-header">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/api/info</span>
+          <button class="copy-btn" onclick="copyText('/api/info')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Returns OS version, CPU/RAM utilization, hostname, active mode, and uptime.</div>
+      </div>
+
+      <div class="endpoint-card" data-search="settings config port tunnel key">
+        <div class="endpoint-header">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/api/settings</span>
+          <button class="copy-btn" onclick="copyText('/api/settings')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Fetch current server configuration parameters.</div>
+      </div>
+    </div>
+
+    <!-- 2. Screen & Window Inspection -->
+    <h2 class="section-title">📸 2. Screen & Window Management</h2>
+    <div class="endpoints-grid">
+      <div class="endpoint-card" data-search="screen screenshot image base64 vision jpeg">
+        <div class="endpoint-header">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/api/screen</span>
+          <button class="copy-btn" onclick="copyText('/api/screen')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Captures full display and returns a Base64-encoded JPEG image with screen dimensions.</div>
+      </div>
+
+      <div class="endpoint-card" data-search="windows list hwnd handles title active focused">
+        <div class="endpoint-header">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/api/windows</span>
+          <button class="copy-btn" onclick="copyText('/api/windows')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Lists all top-level open application windows, titles, bounding boxes, and <code>hwnd</code> handles.</div>
+      </div>
+
+      <div class="endpoint-card" data-search="window screenshot crop specific hwnd">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/windows/screenshot</span>
+          <button class="copy-btn" onclick="copyText('/api/windows/screenshot')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Capture only the specified window handle.</div>
+        <div class="code-container"><pre>{"hwnd": <span class="num-val">198274</span>}</pre></div>
+      </div>
+
+      <div class="endpoint-card" data-search="window focus bring front hwnd">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/windows/focus</span>
+          <button class="copy-btn" onclick="copyText('/api/windows/focus')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Bring targeted window to foreground.</div>
+        <div class="code-container"><pre>{"hwnd": <span class="num-val">198274</span>}</pre></div>
+      </div>
+
+      <div class="endpoint-card" data-search="window resize move geometry bounds">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/windows/geometry</span>
+          <button class="copy-btn" onclick="copyText('/api/windows/geometry')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Set position and size of a window.</div>
+        <div class="code-container"><pre>{"hwnd": <span class="num-val">198274</span>, "x": <span class="num-val">0</span>, "y": <span class="num-val">0</span>, "width": <span class="num-val">1280</span>, "height": <span class="num-val">800</span>}</pre></div>
+      </div>
+    </div>
+
+    <!-- 3. Mouse & Keyboard Hardware Control -->
+    <h2 class="section-title">🖱️ 3. Input Emulation (Mouse & Keyboard)</h2>
+    <div class="endpoints-grid">
+      <div class="endpoint-card" data-search="mouse click left right double coordinates">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/mouse/click</span>
+          <button class="copy-btn" onclick="copyText('/api/mouse/click')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Emulates mouse clicks at specific (x, y) screen pixel coordinates.</div>
+        <div class="code-container"><pre>{"x": <span class="num-val">500</span>, "y": <span class="num-val">300</span>, "button": <span class="string-val">"left"</span>, "clicks": <span class="num-val">1</span>}</pre></div>
+      </div>
+
+      <div class="endpoint-card" data-search="mouse scroll wheel up down">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/mouse/scroll</span>
+          <button class="copy-btn" onclick="copyText('/api/mouse/scroll')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Scroll vertically (positive = up, negative = down).</div>
+        <div class="code-container"><pre>{"clicks": <span class="num-val">-5</span>}</pre></div>
+      </div>
+
+      <div class="endpoint-card" data-search="keyboard type text unicode write paste">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/keyboard/type</span>
+          <button class="copy-btn" onclick="copyText('/api/keyboard/type')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Types text with support for UTF-8 and special language characters via clipboard automation.</div>
+        <div class="code-container"><pre>{"text": <span class="string-val">"agent2win automation text"</span>, "unicode": <span class="param-tag">true</span>}</pre></div>
+      </div>
+
+      <div class="endpoint-card" data-search="keyboard hotkey shortcut press key ctrl alt shift">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/keyboard/hotkey</span>
+          <button class="copy-btn" onclick="copyText('/api/keyboard/hotkey')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Press keyboard key combinations simultaneously.</div>
+        <div class="code-container"><pre>{"keys": [<span class="string-val">"ctrl"</span>, <span class="string-val">"shift"</span>, <span class="string-val">"esc"</span>]}</pre></div>
+      </div>
+    </div>
+
+    <!-- 4. Commands & Shell -->
+    <h2 class="section-title">💻 4. Command Execution & Shell</h2>
+    <div class="endpoints-grid">
+      <div class="endpoint-card" data-search="command shell powershell cmd exec bash terminal">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/command</span>
+          <button class="copy-btn" onclick="copyText('/api/command')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Executes a shell command on Windows and returns stdout, stderr, and exit code.</div>
+        <div class="code-container"><pre>{"cmd": <span class="string-val">"ipconfig /all"</span>, "timeout": <span class="num-val">15</span>}</pre></div>
+      </div>
+    </div>
+
+    <!-- 5. Filesystem -->
+    <h2 class="section-title">📁 5. Filesystem & Storage</h2>
+    <div class="endpoints-grid">
+      <div class="endpoint-card" data-search="files list directory browse path folder">
+        <div class="endpoint-header">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/api/files/list?path=C:\Users</span>
+          <button class="copy-btn" onclick="copyText('/api/files/list')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Lists directory entries, sizes, permissions, and timestamps.</div>
+      </div>
+
+      <div class="endpoint-card" data-search="files read content text get">
+        <div class="endpoint-header">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/api/files/read?path=C:\config.json</span>
+          <button class="copy-btn" onclick="copyText('/api/files/read')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Reads text or raw file data from the specified path.</div>
+      </div>
+
+      <div class="endpoint-card" data-search="files write save create overwrite">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/files/write</span>
+          <button class="copy-btn" onclick="copyText('/api/files/write')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Writes content to target path.</div>
+        <div class="code-container"><pre>{"path": <span class="string-val">"C:\\Users\\Public\\script.py"</span>, "content": <span class="string-val">"print('hello')"</span>}</pre></div>
+      </div>
+    </div>
+
+    <!-- 6. Processes -->
+    <h2 class="section-title">🚀 6. Process & App Control</h2>
+    <div class="endpoints-grid">
+      <div class="endpoint-card" data-search="process list ps tasklist running apps">
+        <div class="endpoint-header">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/api/processes</span>
+          <button class="copy-btn" onclick="copyText('/api/processes')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Lists all active OS processes with PID, CPU %, Memory, and executable path.</div>
+      </div>
+
+      <div class="endpoint-card" data-search="process launch start run open program app">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/processes/launch</span>
+          <button class="copy-btn" onclick="copyText('/api/processes/launch')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Launches an application binary or script.</div>
+        <div class="code-container"><pre>{"path": <span class="string-val">"notepad.exe"</span>, "args": [<span class="string-val">"C:\\log.txt"</span>]}</pre></div>
+      </div>
+
+      <div class="endpoint-card" data-search="process kill terminate stop pid">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/processes/kill</span>
+          <button class="copy-btn" onclick="copyText('/api/processes/kill')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Terminates a process by PID.</div>
+        <div class="code-container"><pre>{"pid": <span class="num-val">4912</span>}</pre></div>
+      </div>
+    </div>
+
+    <!-- 7. Audio, Clipboard, Power, Registry -->
+    <h2 class="section-title">🔧 7. System Subsystems</h2>
+    <div class="endpoints-grid">
+      <div class="endpoint-card" data-search="clipboard copy paste text">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/clipboard</span>
+          <button class="copy-btn" onclick="copyText('/api/clipboard')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Get or set Windows clipboard text.</div>
+        <div class="code-container"><pre>{"text": <span class="string-val">"Data copied from agent"</span>}</pre></div>
+      </div>
+
+      <div class="endpoint-card" data-search="audio volume sound mute speaker">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/audio/volume</span>
+          <button class="copy-btn" onclick="copyText('/api/audio/volume')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Get or set master audio output volume (0-100).</div>
+        <div class="code-container"><pre>{"level": <span class="num-val">40</span>}</pre></div>
+      </div>
+
+      <div class="endpoint-card" data-search="registry regedit read write hkcu hklm">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/registry/read</span>
+          <button class="copy-btn" onclick="copyText('/api/registry/read')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Read keys and values from Windows Registry.</div>
+        <div class="code-container"><pre>{"hive": <span class="string-val">"HKCU"</span>, "path": <span class="string-val">"Software\\Microsoft\\Windows"</span>, "name": <span class="string-val">"Version"</span>}</pre></div>
+      </div>
+
+      <div class="endpoint-card" data-search="power sleep restart lock shutdown reboot">
+        <div class="endpoint-header">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/api/power/lock</span>
+          <button class="copy-btn" onclick="copyText('/api/power/lock')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Lock workstation screen immediately. (Also supports <code>/api/power/sleep</code>, <code>/api/power/restart</code>).</div>
+      </div>
+    </div>
+
+    <!-- 8. WebSocket Stream -->
+    <h2 class="section-title">🔌 8. Real-time WebSocket Protocol</h2>
+    <div class="endpoints-grid">
+      <div class="endpoint-card" data-search="websocket ws realtime stream full duplex">
+        <div class="endpoint-header">
+          <span class="method-badge ws">WSS</span>
+          <span class="endpoint-path">/ws</span>
+          <button class="copy-btn" onclick="copyText('/ws')">Copy</button>
+        </div>
+        <div class="endpoint-desc">Real-time bi-directional control stream. Send JSON message payload matching any REST action.</div>
+        <div class="code-container"><pre>{"action": <span class="string-val">"command"</span>, "cmd": <span class="string-val">"dir C:\\"</span>}</pre></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>agent2win Protocol Specification • Licensed under MIT • Published on PyPI (<code>pip install agent2win</code>)</p>
+  </footer>
+</div>
+
+<script>
+  function filterEndpoints() {
+    const query = document.getElementById('apiSearch').value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.endpoint-card');
+
+    cards.forEach(card => {
+      const searchData = (card.getAttribute('data-search') || '') + ' ' + card.innerText;
+      if (searchData.toLowerCase().includes(query)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const activeEl = document.activeElement;
+      if (activeEl && activeEl.classList.contains('copy-btn')) {
+        const orig = activeEl.innerText;
+        activeEl.innerText = 'Copied!';
+        setTimeout(() => activeEl.innerText = orig, 1500);
+      }
+    });
+  }
+</script>

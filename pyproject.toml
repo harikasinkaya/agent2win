@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent2win"
+version = "1.0.0"
+description = "Universal Bridge Between Web/Cloud AI Agents (ChatGPT, Gemini, Grok, Claude) & Windows OS"
+readme = "README.md"
+authors = [
+    { name = "agent2win Developers" }
+]
+license = { text = "MIT" }
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: System :: Systems Administration",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+    "aiohttp>=3.9.0",
+    "Pillow>=10.0.0",
+    "mss>=9.0.0",
+    "pyautogui>=0.9.54",
+    "pyperclip>=1.8.0",
+    "psutil>=5.9.0",
+    "pycaw>=20230407; platform_system=='Windows'",
+    "comtypes>=1.4.1; platform_system=='Windows'",
+    "pyvda>=1.0.0; platform_system=='Windows'",
+    "pystray>=0.19.0; platform_system=='Windows'",
+    "win10toast>=0.9; platform_system=='Windows'",
+]
+
+[project.urls]
+Homepage = "https://github.com/harikasinkaya/agent2win"
+Documentation = "https://github.com/harikasinkaya/agent2win#readme"
+Repository = "https://github.com/harikasinkaya/agent2win.git"
+Issues = "https://github.com/harikasinkaya/agent2win/issues"
+
+[project.scripts]
+agent2win = "agent2win.cli:main"
+
+[tool.setuptools]
+package-dir = {"agent2win" = "src"}
+packages = ["agent2win"]

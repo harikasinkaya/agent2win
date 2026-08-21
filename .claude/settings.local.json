@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(python -c \"import agent2win.cli; print\\('CLI module OK'\\)\")",
+      "PowerShell(pip install *)",
+      "PowerShell(python -m build)",
+      "PowerShell($env:TWINE_PASSWORD = $null; $env:TWINE_USERNAME = $null)",
+      "PowerShell(gh auth *)",
+      "PowerShell(git *)"
+    ]
+  }
+}
