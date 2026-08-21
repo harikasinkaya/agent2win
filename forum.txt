@@ -1,0 +1,65 @@
+🚀 **agent2win: Web ve Bulut Yapay Zekalarına (ChatGPT, Gemini, Grok, Claude) Windows'unuzu Kontrol Ettirin!**
+
+Selamlar herkese! 👋
+
+Web üzerinden çalışan yapay zekaları (ChatGPT Custom GPTs / Actions, Gemini, Grok, Claude Web/API) veya yerel/bulut ajan framework'lerini (LangChain, AutoGen, CrewAI) doğrudan Windows işletim sisteminize bağlayıp tam otonom bir bilgisayar asistanına dönüştüren açık kaynaklı köprü middleware projem **`agent2win`** yayınlandı!
+
+Artık PyPI üzerinden tek komutla indirip anında kullanabilirsiniz:
+📦 **`pip install agent2win`**
+
+---
+
+### 💡 Ne İşe Yarar & Nasıl Çalışır?
+
+`agent2win`, Windows bilgisayarınızda veya sunucunuzda hafif bir HTTP/WebSocket sunucusu başlatır ve **Cloudflare Tunnel (`cloudflared`)** veya **ngrok** üzerinden port yönlendirme (port forwarding) gerektirmeden anında güvenli bir genel HTTPS adresi üretir.
+
+Bu sayede web erişimi olan herhangi bir LLM modeline bu URL'yi ve hazır protokol dosyamızı vererek bilgisayarınızı uzaktan yönetmesini sağlayabilirsiniz.
+
+---
+
+### ✨ Öne Çıkan Özellikler
+
+- 🖥️ **Sanal Masaüstü İzolasyonu (Background Work):** Ajan `/api/desktops` üzerinden kendi sanal masaüstünü (Desktop 2) oluşturur ve orada çalışır. Siz Desktop 1'de videonuzu izlemeye veya oyununuzu oynamaya devam edebilirsiniz.
+- 📸 **Görsel & Pencere Denetimi:** Ekran görüntüsü alma (Base64 JPEG) ve doğrudan pencereye (`hwnd`) odaklanıp pencere bazlı görüntü yakalama.
+- 🖱️ **Mouse & Klavye Emülasyonu:** Piksel hassasiyetinde tıklama, sürükleme, kaydırma ve Türkçe/Unicode karakter destekli yazma.
+- 💻 **Komut ve Sistem Yönetimi:** PowerShell/CMD komutları, dosya okuma/yazma/arama, süreç (process) sonlandırma/başlatma, Windows Registry ve Servis yönetimi.
+- 🔒 **Güvenlik & Onay Katmanı:** Bearer token doğrulaması, kritik eylemlerde Windows bildirim onay kutucuğu, System Tray acil durum kapatma anahtarı ve tam audit log.
+
+---
+
+### ⚡ 3 Adımda Hızlı Başlangıç
+
+**1. Kurulum:**
+```bash
+pip install agent2win
+```
+
+**2. Sunucuyu Başlatma:**
+```bash
+agent2win
+```
+*(Konsolda `🌐 Tunnel: https://xxxx.trycloudflare.com` şeklinde genel HTTPS linkiniz çıkar).*
+
+**3. Web AI (ChatGPT, Gemini, Grok, Claude)'a Bağlama:**
+Kullandığınız modele şu hazır promptu yapıştırmanız yeterlidir:
+
+```markdown
+Read the official agent2win control protocol from this URL:
+https://raw.githubusercontent.com/harikasinkaya/agent2win/refs/heads/main/AGENT_PROTOCOL.md
+
+You are now an autonomous Windows controller agent.
+My agent2win server URL is: <BURAYA_TUNNEL_URL'İNİZİ_YAPIŞTIRIN>
+My API key is: <API_KEY_VARSA_YAZIN_YOKSA_BOŞ_BIRAKIN>
+
+Please inspect the system info, capture the screen, and follow my instructions to control my Windows machine.
+```
+
+---
+
+### 🔗 Bağlantılar
+
+- 📦 **PyPI:** https://pypi.org/project/agent2win/
+- ⭐ **GitHub:** https://github.com/harikasinkaya/agent2win
+- 📖 **Ajan Protokol Şeması:** https://raw.githubusercontent.com/harikasinkaya/agent2win/refs/heads/main/AGENT_PROTOCOL.md
+
+Projeyi yıldızlayarak (star) ve deneyip geri bildirimlerinizi paylaşarak destek olabilirsiniz! Sorularınızı ve önerilerinizi bekliyorum. 🚀
