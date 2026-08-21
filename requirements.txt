@@ -1,4 +1,4 @@
-# Windows Arena AI — Dependencies
+# agent2win — Dependencies
 # Core (required)
 aiohttp>=3.9.0
 
@@ -18,7 +18,7 @@ pycaw>=20230407
 comtypes>=1.4.1
 
 # Virtual desktops (recommended)
-pyvda>=1.0.0
+pyvda>=0.6.0
 
 # System tray (optional, Windows only)
 pystray>=0.19.0

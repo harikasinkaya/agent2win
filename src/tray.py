@@ -97,9 +97,9 @@ class TrayApp:
 
         color = "#ff4444" if self.settings.unrestricted_mode else "#00d4ff"
         self._icon = pystray.Icon(
-            "WindowsArenaAI",
+            "agent2win",
             create_icon_image(color),
-            "Windows Arena AI",
+            "agent2win",
             menu=self._create_menu(),
         )
 

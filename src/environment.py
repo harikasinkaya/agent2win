@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Environment & System Info
+agent2win — Environment & System Info
 Environment variables, installed programs, startup items, scheduled tasks.
 """
 import subprocess

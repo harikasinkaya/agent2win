@@ -461,7 +461,7 @@ All actions from REST are available via WebSocket JSON messages.</div>
     async def handle_desktops_create(self, request):
         if not self._check_auth(request): return self._unauthorized()
         d = await request.json()
-        return self._json_response(await self.desktops.create_desktop(d.get("name", "Arena AI Agent")))
+        return self._json_response(await self.desktops.create_desktop(d.get("name", "agent2win Agent")))
 
     async def handle_desktops_switch(self, request):
         if not self._check_auth(request): return self._unauthorized()
@@ -822,7 +822,7 @@ All actions from REST are available via WebSocket JSON messages.</div>
         if a == "tile": return await self.windows.tile_windows(d["hwnds"], d.get("cols", 2))
         # Desktops
         if a == "desktops": return await self.desktops.list_desktops()
-        if a == "create_desktop": return await self.desktops.create_desktop(d.get("name", "Arena AI Agent"))
+        if a == "create_desktop": return await self.desktops.create_desktop(d.get("name", "agent2win Agent"))
         if a == "switch_desktop": return await self.desktops.switch_to_desktop(d["index"])
         if a == "switch_agent": return await self.desktops.switch_to_agent_desktop()
         if a == "switch_user": return await self.desktops.switch_to_user_desktop()
@@ -1034,7 +1034,7 @@ All actions from REST are available via WebSocket JSON messages.</div>
         await site.start()
 
         self.logger.info(f"═══════════════════════════════════════════")
-        self.logger.info(f"  Windows Arena AI Server v1.0.0")
+        self.logger.info(f"  agent2win Server v1.0.3")
         self.logger.info(f"  Listening on http://{self.settings.host}:{self.settings.port}")
         self.logger.info(f"  Unrestricted mode: {'ON ⚠️' if self.settings.unrestricted_mode else 'OFF 🔒'}")
         self.logger.info(f"═══════════════════════════════════════════")

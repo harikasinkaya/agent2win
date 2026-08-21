@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Command Execution Engine
+agent2win — Command Execution Engine
 Runs shell commands with safety checks, timeouts, and approval flow.
 """
 import subprocess

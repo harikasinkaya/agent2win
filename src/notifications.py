@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Notification & Approval System
+agent2win — Notification & Approval System
 Shows Windows toast notifications when the agent requests access.
 Users can approve or deny actions from the system tray or web UI.
 """

@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Windows Services Manager
+agent2win — Windows Services Manager
 List, start, stop, and manage Windows services.
 """
 import subprocess

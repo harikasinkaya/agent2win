@@ -1,5 +1,5 @@
 """
-Windows Arena AI — System Power & Lock Controls
+agent2win — System Power & Lock Controls
 Shutdown, restart, sleep, lock, hibernate.
 """
 import subprocess

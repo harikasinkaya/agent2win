@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Input Control (Mouse & Keyboard)
+agent2win — Input Control (Mouse & Keyboard)
 Simulates mouse clicks, movement, scrolling, and keyboard input.
 """
 import time

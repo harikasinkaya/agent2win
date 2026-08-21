@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Window Manager
+agent2win — Window Manager
 Find, focus, resize, move, minimize, maximize, close windows.
 List all open windows with their titles and positions.
 """

@@ -1,7 +1,7 @@
 @echo off
 echo.
 echo  ╔═══════════════════════════════════════════════╗
-echo  ║     🪟 Windows Arena AI — Installer           ║
+echo  ║        🚀 agent2win — Installer               ║
 echo  ╚═══════════════════════════════════════════════╝
 echo.
 
@@ -23,14 +23,14 @@ pip install -r requirements.txt
 echo.
 
 :: Create config directory
-if not exist "%APPDATA%\WindowsArenaAI" mkdir "%APPDATA%\WindowsArenaAI"
+if not exist "%APPDATA%\agent2win" mkdir "%APPDATA%\agent2win"
 
 echo  ═══════════════════════════════════════════════
 echo   ✅ Installation complete!
 echo.
-echo   To start:  python main.py
-echo   Settings:  python main.py --settings
-echo   Help:      python main.py --help
+echo   To start:  agent2win  (or python main.py)
+echo   Settings:  agent2win --settings
+echo   Help:      agent2win --help
 echo  ═══════════════════════════════════════════════
 echo.
 pause

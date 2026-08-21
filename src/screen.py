@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Screen Capture & Streaming
+agent2win — Screen Capture & Streaming
 Captures the desktop screen, encodes to JPEG, and provides frames for streaming.
 """
 import io

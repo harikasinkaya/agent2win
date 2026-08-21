@@ -1,6 +1,6 @@
 """
-Windows Arena AI — Tunnel Manager
-Creates a free public tunnel so Arena AI agents can reach the Windows machine.
+agent2win — Tunnel Manager
+Creates a free public tunnel so web & cloud AI agents can reach the Windows machine.
 Supports: Cloudflare Tunnel (cloudflared), ngrok, or custom URL.
 """
 import subprocess

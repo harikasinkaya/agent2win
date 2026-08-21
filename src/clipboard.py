@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Clipboard Manager
+agent2win — Clipboard Manager
 Read and write the system clipboard (text, images).
 """
 import subprocess

@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Filesystem Browser & Manager
+agent2win — Filesystem Browser & Manager
 Browse, read, create, and manage files/directories on the Windows machine.
 """
 import os

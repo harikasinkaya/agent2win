@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Audio Control
+agent2win — Audio Control
 Control system volume, mute, and audio devices.
 """
 import subprocess

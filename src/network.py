@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Network Manager
+agent2win — Network Manager
 WiFi control, network info, ping, port scanning, downloads.
 """
 import subprocess

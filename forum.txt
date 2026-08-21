@@ -1,65 +1,47 @@
-🚀 **agent2win: Control Your Windows PC/Server with Web & Cloud AIs (ChatGPT, Gemini, Grok, Claude)!**
+🚀 **agent2win: Control Windows with Web AIs (ChatGPT, Gemini, Grok, Claude)!**
 
 Hey everyone! 👋
 
-I'm excited to share **`agent2win`**, an open-source lightweight middleware bridge that allows web-based AI platforms (ChatGPT Custom GPTs / Actions, Gemini, Grok, Claude Web/API) or cloud agent frameworks (LangChain, AutoGen, CrewAI) to remotely control your Windows PC or Windows Server as an autonomous computer-use operator!
+I built **`agent2win`**, an open-source bridge allowing web-based AIs (ChatGPT, Gemini, Grok, Claude) or cloud frameworks (LangChain, AutoGen) to remotely control your Windows PC/Server via REST & WebSocket!
 
-Now officially live on PyPI:
-📦 **`pip install agent2win`**
-
----
-
-### 💡 What Is It & How Does It Work?
-
-`agent2win` launches a fast HTTP/WebSocket server on your Windows machine and automatically generates a secure public HTTPS endpoint via **Cloudflare Tunnel (`cloudflared`)** or **ngrok** with **zero router configuration or port forwarding**.
-
-Any AI model with web-browsing or tool-calling capabilities can fetch the agent protocol, inspect your screen, simulate mouse/keyboard inputs, and execute tasks directly on your OS.
+📦 **Install:** `pip install agent2win`
 
 ---
 
 ### ✨ Key Features
-
-- 🖥️ **Virtual Desktop Isolation (Background Mode):** The agent creates its own virtual desktop (Desktop 2) via `/api/desktops` and operates there autonomously. You can continue watching YouTube or gaming on Desktop 1 uninterrupted!
-- 📸 **Vision & Window Inspection:** High-speed screenshots (Base64 JPEG) and targeted window capture/control via window handles (`hwnd`).
-- 🖱️ **Full Input Simulation:** Pixel-accurate mouse clicks, drags, scrolls, and Unicode/international keyboard typing via clipboard automation.
-- 💻 **OS & System Administration:** Shell command execution (PowerShell/CMD), filesystem navigation (read/write/search), process management, Windows Registry access, and service controls.
-- 🔒 **Security & Approvals:** Token-based authentication (`Bearer`), real-time desktop confirmation prompts for risky actions, system tray killswitch, and full audit logging.
+- 🖥️ **Virtual Desktop Isolation:** Agent works on Desktop 2 while you game/work on Desktop 1.
+- 📸 **Vision & Window Inspection:** High-speed screenshots & window (`hwnd`) control.
+- 🖱️ **Full Input Simulation:** Precise mouse clicks, scroll, and unicode typing.
+- 💻 **OS Administration:** PowerShell/CMD, filesystem, process & registry management.
+- ⚡ **Zero-Config Tunnels:** Auto-creates secure public HTTPS via Cloudflare/ngrok.
 
 ---
 
-### ⚡ Quick Start (3 Steps)
+### ⚡ Quick Start
 
-**1. Install from PyPI:**
+**1. Install & Run:**
 ```bash
 pip install agent2win
-```
-
-**2. Start the Server:**
-```bash
 agent2win
 ```
-*(Console will print your live tunnel URL: `🌐 Tunnel: https://xxxx.trycloudflare.com`).*
+*(Console will print: `🌐 Tunnel: https://xxxx.trycloudflare.com`)*
 
-**3. Connect Any Web AI (ChatGPT, Gemini, Grok, Claude):**
-Paste this prompt directly into your web AI chat:
-
+**2. Connect Any Web AI:**
+Paste this prompt into ChatGPT / Gemini / Grok / Claude:
 ```markdown
 Read the official agent2win control protocol from this URL:
 https://raw.githubusercontent.com/harikasinkaya/agent2win/refs/heads/main/AGENT_PROTOCOL.md
 
 You are now an autonomous Windows controller agent.
-My agent2win server URL is: <PASTE_YOUR_TUNNEL_URL_HERE>
-My API key is: <PASTE_YOUR_API_KEY_OR_LEAVE_EMPTY>
+My server URL is: <PASTE_TUNNEL_URL>
+My API key is: <LEAVE_EMPTY_OR_PASTE_KEY>
 
-Please inspect the system info, capture the screen, and follow my instructions to control my Windows machine.
+Inspect system info, capture screen, and follow my commands.
 ```
 
 ---
 
-### 🔗 Useful Links
-
+### 🔗 Links
 - 📦 **PyPI:** https://pypi.org/project/agent2win/
-- ⭐ **GitHub Repo:** https://github.com/harikasinkaya/agent2win
-- 📖 **Raw Protocol URL:** https://raw.githubusercontent.com/harikasinkaya/agent2win/refs/heads/main/AGENT_PROTOCOL.md
-
-Feel free to test it out, star the repo on GitHub, and share your feedback! 🚀
+- ⭐ **GitHub:** https://github.com/harikasinkaya/agent2win
+- 📖 **Protocol:** https://raw.githubusercontent.com/harikasinkaya/agent2win/refs/heads/main/AGENT_PROTOCOL.md

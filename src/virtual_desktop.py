@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Virtual Desktop Manager
+agent2win — Virtual Desktop Manager
 Create, switch, and manage Windows virtual desktops.
 The agent can work on its own desktop while the user watches YouTube on another.
 

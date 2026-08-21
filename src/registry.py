@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Registry Manager
+agent2win — Registry Manager
 Read and write Windows registry keys.
 """
 import subprocess

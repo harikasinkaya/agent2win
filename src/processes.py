@@ -1,5 +1,5 @@
 """
-Windows Arena AI — Process Manager
+agent2win — Process Manager
 List, launch, and manage Windows processes.
 """
 import subprocess

@@ -9,7 +9,8 @@
       "PowerShell(git *)",
       "PowerShell(git commit *)",
       "PowerShell(agent2win *)",
-      "PowerShell(Receive-Job *)"
+      "PowerShell(Receive-Job *)",
+      "PowerShell(\\(Get-Content forum.txt -Raw\\).Length)"
     ]
   }
 }
