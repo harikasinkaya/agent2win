@@ -81,20 +81,24 @@ def main():
     auth_str = f"{GREEN}Enabled (Bearer token){RESET}" if settings.api_key else f"{GRAY}Disabled (Open){RESET}"
     tray_str = f"{GREEN}Active{RESET}" if not args.no_tray else f"{GRAY}Disabled{RESET}"
 
-    # Clean ASCII logo with raw string blocks
+    # Display host (127.0.0.1 for display clarity)
+    display_host = "127.0.0.1" if settings.host in ["0.0.0.0", ""] else settings.host
+
     banner = f"""{CYAN}{BOLD}
-   ___   ______  ____ _   __   ___   _       __ ____ _   __
-  / _ | / ___/ |/ / // | / /  |_  | | |     / //  _// | / /
- / __ |/ (_ //    // /| |/ /  / __/  | | /| / /_/ / /  |/ /
-/_/ |_|\___//_/|_//_/ |_/_/  /____/  |__/|__//___//_/|_/
-{RESET}{GRAY} Universal Bridge Between Web/Cloud AI Agents & Windows OS  {CYAN}v1.0.5{RESET}
-{GRAY}─────────────────────────────────────────────────────────────────────────────{RESET}
-  {BOLD}Local Endpoint :{RESET} {CYAN}http://{settings.host}:{settings.port}{RESET}
+ █████╗  ██████╗ ███████╗███╗   ██╗████████╗██████╗ ██╗    ██╗██╗███╗   ██╗
+██╔══██╗██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝╚════██╗██║    ██║██║████╗  ██║
+███████║██║  ███╗█████╗  ██╔██╗ ██║   ██║    █████╔╝██║ █╗ ██║██║██╔██╗ ██║
+██╔══██║██║   ██║██╔══╝  ██║╚██╗██║   ██║   ██╔═══╝ ██║███╗██║██║██║╚██╗██║
+██║  ██║╚██████╔╝███████╗██║ ╚████║   ██║   ███████╗╚███╔███╔╝██║██║ ╚████║
+╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝ ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝
+{RESET}{GRAY} Universal Bridge Between Web/Cloud AI Agents & Windows OS  {CYAN}v1.0.6{RESET}
+{GRAY}───────────────────────────────────────────────────────────────────────────────{RESET}
+  {BOLD}Local Endpoint :{RESET} {CYAN}http://{display_host}:{settings.port}{RESET}
   {BOLD}Authentication :{RESET} {auth_str}
   {BOLD}Security Mode  :{RESET} {mode_str}
   {BOLD}System Tray    :{RESET} {tray_str}
   {BOLD}Tunnel Provider:{RESET} {settings.tunnel_provider}
-{GRAY}─────────────────────────────────────────────────────────────────────────────{RESET}
+{GRAY}───────────────────────────────────────────────────────────────────────────────{RESET}
   {GRAY}* Press {YELLOW}Ctrl+C{GRAY} in terminal to gracefully shutdown{RESET}
 """
     print(banner)

@@ -1033,7 +1033,8 @@ All actions from REST are available via WebSocket JSON messages.</div>
         site = web.TCPSite(self._runner, self.settings.host, self.settings.port)
         await site.start()
 
-        self.logger.info(f"🚀 Server listening on http://{self.settings.host}:{self.settings.port}")
+        display_host = "127.0.0.1" if self.settings.host in ["0.0.0.0", ""] else self.settings.host
+        self.logger.info(f"🚀 Server listening on http://{display_host}:{self.settings.port}")
 
         if self.settings.tunnel_provider != "none":
             tunnel_result = self.tunnel.start(self.settings.port)
